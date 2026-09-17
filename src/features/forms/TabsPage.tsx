@@ -13,10 +13,11 @@ import { addEmployee } from "../employee/employeeSlice";
 import { setActiveTab, setSubmitting } from "./formsSlice";
 import { createEmployee } from "../../services/employeeApi";
 import { PersonalTabForm } from "./PersonalTabForm";
-import { ContactTabForm} from "./ContactTabForm";
+import { ContactTabForm } from "./ContactTabForm";
 import { WorkTabForm } from "./WorkTabForm";
 import { employeeFormSchema } from "./validationSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
+import useAppToast from "../../hooks/useAppToast";
 
 const useStyles = makeStyles({
   panel: {
@@ -46,6 +47,7 @@ export function TabsPage() {
   const activeTab = useAppSelector((state) => state.forms.activeTab);
   const isSubmitting = useAppSelector((state) => state.forms.isSubmitting);
   const [submitError, setSubmitError] = useState("");
+  const {showSuccess, showError} = useAppToast(); 
 
   const {
     control,
@@ -71,14 +73,13 @@ export function TabsPage() {
       const employee = await createEmployee({
         ...values,
         status: "Active",
-        location: "",
-        notes: "",
       });
-
       dispatch(addEmployee(employee));
+      showSuccess("Employee data saved successfully.");
       reset(defaultValues);
       dispatch(setActiveTab("personal"));
     } catch (error) {
+      showError("Failed to save employee data.");
       setSubmitError(
         error instanceof Error ? error.message : "Something went wrong."
       );

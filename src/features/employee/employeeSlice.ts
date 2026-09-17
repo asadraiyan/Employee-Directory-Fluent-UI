@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import type { Employee, Location } from "../../types/employee";
+import type { Employee } from "../../types/employee";
 
 type EmployeeState = {
   items: Employee[];
@@ -18,8 +18,6 @@ const initialState: EmployeeState = {
       },
       tab3: { department: "Engineering", role: "Developer" },
       status: "Active",
-      location: "",
-      notes: "Available",
     },
     {
       id: 2,
@@ -32,8 +30,6 @@ const initialState: EmployeeState = {
       },
       tab3: { department: "Design", role: "Designer" },
       status: "Active",
-      location: "",
-      notes: "Prefers mornings",
     },
     {
       id: 3,
@@ -46,8 +42,6 @@ const initialState: EmployeeState = {
       },
       tab3: { department: "Design", role: "Designer" },
       status: "Active",
-      location: "",
-      notes: "Prefers afternoons",
     },
   ],
 };
@@ -59,26 +53,8 @@ const employeeSlice = createSlice({
     addEmployee: (state, action: PayloadAction<Employee>) => {
       state.items.push(action.payload);
     },
-    updateEmployeeMeta: (
-      state,
-      action: PayloadAction<{
-        id: number;
-        location?: Location;
-        notes?: string;
-      }>
-    ) => {
-      const employee = state.items.find((item) => item.id === action.payload.id);
-      if (!employee) return;
-
-      if (action.payload.location !== undefined) {
-        employee.location = action.payload.location;
-      }
-      if (action.payload.notes !== undefined) {
-        employee.notes = action.payload.notes;
-      }
-    },
   },
 });
 
-export const { addEmployee, updateEmployeeMeta } = employeeSlice.actions;
+export const { addEmployee } = employeeSlice.actions;
 export default employeeSlice.reducer;

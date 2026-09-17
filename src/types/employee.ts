@@ -1,5 +1,4 @@
 export type Gender = "Male" | "Female" | "Other";
-export type Location = "Noida" | "Gurgaon" | "Bangalore" | "Hyderabad" | "";
 
 export interface EmployeeFormValues {
   tab1: {
@@ -22,8 +21,6 @@ export interface EmployeeFormValues {
 export interface Employee extends EmployeeFormValues {
   id: number;
   status: "Active" | "Inactive";
-  location: Location;
-  notes: string;
 }
 
 export type EmployeeCreatePayload = Omit<Employee, "id">;

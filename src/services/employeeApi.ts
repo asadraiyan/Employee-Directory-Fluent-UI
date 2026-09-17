@@ -2,10 +2,6 @@ import type { Employee, EmployeeCreatePayload } from "../types/employee";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL as string | undefined;
 
-/**
- * If VITE_API_BASE_URL is configured, this calls the real backend.
- * Otherwise it uses a small mock async API so the application works immediately.
- */
 export async function createEmployee(
   payload: EmployeeCreatePayload
 ): Promise<Employee> {
@@ -27,6 +23,6 @@ export async function createEmployee(
 
   return {
     ...payload,
-    id: Date.now(),
+    id: Date.now()
   };
 }
