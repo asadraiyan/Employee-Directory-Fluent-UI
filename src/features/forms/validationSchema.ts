@@ -8,11 +8,17 @@ export const employeeFormSchema = z.object({
       .min(2, "Enter at least 2 characters."),
     age: z
       .string()
-      .min(1, "Age is required.")
+      .min(1, "Birth date is required.")
       .refine((value) => {
-        const age = Number(value);
-        return age >= 18 && age <= 100;
-      }, "Age must be between 18 and 100."),
+        const birthDate = new Date(value);
+        return !isNaN(birthDate.getTime());
+      }, "Please enter a valid birth date.")
+      .refine((value) => {
+        const birthDate = new Date(value);
+        const today = new Date();
+
+        return birthDate <= today;
+      }, "Birth date cannot be in the future."),
     gender: z.enum(["Male", "Female", "Other"], {
       error: "Please select gender.",
     }),
