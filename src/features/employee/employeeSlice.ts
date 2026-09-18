@@ -9,9 +9,9 @@ const initialState: EmployeeState = {
   items: [
     {
       id: 1,
-      tab1: { name: "Alice Johnson", age: "29", gender: "Female" },
+      tab1: { name: "John Doe", age: "29", gender: "Male" },
       tab2: {
-        email: "alice@example.com",
+        email: "john@example.com",
         phone: "9876543210",
         address: "Noida",
         contactMethod: "Email",
@@ -21,9 +21,9 @@ const initialState: EmployeeState = {
     },
     {
       id: 2,
-      tab1: { name: "Bob Smith", age: "31", gender: "Male" },
+      tab1: { name: "James Smith", age: "31", gender: "Male" },
       tab2: {
-        email: "bob@example.com",
+        email: "james@example.com",
         phone: "9876543211",
         address: "Gurgaon",
         contactMethod: "Teams",
@@ -33,9 +33,9 @@ const initialState: EmployeeState = {
     },
     {
       id: 3,
-      tab1: { name: "Carol Lee", age: "28", gender: "Female" },
+      tab1: { name: "Emily Johnson", age: "28", gender: "Female" },
       tab2: {
-        email: "carol@example.com",
+        email: "emily@example.com",
         phone: "9876543212",
         address: "Bangalore",
         contactMethod: "Phone",

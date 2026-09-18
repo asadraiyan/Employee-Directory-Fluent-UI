@@ -1,14 +1,16 @@
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHeader,
-  TableHeaderCell,
-  TableRow,
+  DataGrid,
+  DataGridBody,
+  DataGridCell,
+  DataGridHeader,
+  DataGridHeaderCell,
+  DataGridRow,
   makeStyles,
   Text,
 } from "@fluentui/react-components";
 import { useAppSelector } from "../../app/hooks";
+import type { Employee } from "../../types/employee";
+import { employeeColumns } from "./employeeColumns";
 
 const useStyles = makeStyles({
   section: {
@@ -34,39 +36,25 @@ export function GridPage() {
     <section className={styles.section}>
       <Text as="h2" size={500} weight="bold">Table Grid</Text>
       <div className={styles.tableScroll}>
-        <Table className={styles.employeeTable} aria-label="Employee directory">
-          <TableHeader>
-            <TableRow>
-              <TableHeaderCell>ID</TableHeaderCell>
-              <TableHeaderCell>Name</TableHeaderCell>
-              <TableHeaderCell>Role</TableHeaderCell>
-              <TableHeaderCell>Email</TableHeaderCell>
-              <TableHeaderCell>Department</TableHeaderCell>
-              <TableHeaderCell>Status</TableHeaderCell>
-            </TableRow>
-          </TableHeader>
-
-          <TableBody>
-            {employees.length === 0 ? (
-              <TableRow>
-                <TableCell colSpan={6}>
-                  <div className={styles.emptyState}>No employees found.</div>
-                </TableCell>
-              </TableRow>
-            ) : (
-              employees.map((employee) => (
-                <TableRow key={employee.id}>
-                  <TableCell>{employee.id}</TableCell>
-                  <TableCell>{employee.tab1.name}</TableCell>
-                  <TableCell>{employee.tab3.role}</TableCell>
-                  <TableCell>{employee.tab2.email}</TableCell>
-                  <TableCell>{employee.tab3.department}</TableCell>
-                  <TableCell>{employee.status}</TableCell>
-                </TableRow>
-              ))
+        <DataGrid items={employees} columns={employeeColumns} className={styles.employeeTable} aria-label="Employee directory">
+          <DataGridHeader>
+            <DataGridRow>
+              {({ renderHeaderCell }) => (
+                <DataGridHeaderCell>{renderHeaderCell()}</DataGridHeaderCell>
+              )}
+            </DataGridRow>
+          </DataGridHeader>
+          <DataGridBody<Employee>>
+            {({ item, rowId }) => (
+              <DataGridRow<Employee> key={rowId}>
+                {({ renderCell }) => <DataGridCell>{renderCell(item)}</DataGridCell>}
+              </DataGridRow>
             )}
-          </TableBody>
-        </Table>
+          </DataGridBody>
+        </DataGrid>
+        {employees.length === 0 && (
+          <div className={styles.emptyState}>No employees found.</div>
+        )}
       </div>
     </section>
   );
