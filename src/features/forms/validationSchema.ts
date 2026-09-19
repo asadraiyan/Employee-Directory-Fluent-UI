@@ -33,7 +33,7 @@ export const employeeFormSchema = z.object({
       .min(1, "Phone is required.")
       .regex(/^\d{10}$/, "Enter a valid 10-digit phone number."),
     address: z.string().min(1, "Address is required."),
-    contactMethod: z.enum(["Email", "Phone", "Teams"], {
+    contactMethod: z.enum(["Email", "Phone"], {
       error: "Please select a contact method.",
     }),
   }),

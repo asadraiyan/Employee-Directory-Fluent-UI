@@ -56,6 +56,7 @@ export function WorkTabForm({ control, errors, setValue }: Props) {
           >
             <Dropdown
               placeholder="Select department"
+              value={field.value ?? ""}
               selectedOptions={field.value ? [field.value] : []}
               onOptionSelect={(_, data) =>
                 field.onChange(data.optionValue ?? "")

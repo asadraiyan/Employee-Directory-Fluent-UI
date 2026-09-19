@@ -26,3 +26,29 @@ export async function createEmployee(
     id: Date.now()
   };
 }
+
+export async function updateEmployee(
+  id: number,
+  payload: EmployeeCreatePayload
+): Promise<Employee> {
+  if (API_URL) {
+    const response = await fetch(`${API_URL}/employees/${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+
+    if (!response.ok) {
+      throw new Error("Unable to update employee.");
+    }
+
+    return (await response.json()) as Employee;
+  }
+
+  await new Promise((resolve) => setTimeout(resolve, 700));
+
+  return {
+    ...payload,
+    id,
+  };
+}

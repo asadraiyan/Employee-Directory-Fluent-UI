@@ -10,7 +10,7 @@ export interface EmployeeFormValues {
     email: string;
     phone: string;
     address: string;
-    contactMethod: "Email" | "Phone" | "Teams";
+    contactMethod: "Email" | "Phone";
   };
   tab3: {
     department: string;

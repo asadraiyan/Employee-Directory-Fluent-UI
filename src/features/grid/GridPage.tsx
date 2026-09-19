@@ -8,7 +8,8 @@ import {
   makeStyles,
   Text,
 } from "@fluentui/react-components";
-import { useAppSelector } from "../../app/hooks";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { setSelectedEmployeeId } from "../forms/formsSlice";
 import type { Employee } from "../../types/employee";
 import { employeeColumns } from "./employeeColumns";
 
@@ -33,6 +34,7 @@ const useStyles = makeStyles({
 
 export function GridPage() {
   const styles = useStyles();
+  const dispatch = useAppDispatch();
   const employees = useAppSelector((state) => state.employees.items);
 
   return (
@@ -49,7 +51,11 @@ export function GridPage() {
           </DataGridHeader>
           <DataGridBody<Employee>>
             {({ item, rowId }) => (
-              <DataGridRow<Employee> key={rowId}>
+              <DataGridRow<Employee>
+                key={rowId}
+                onClick={() => dispatch(setSelectedEmployeeId(item.id))}
+                style={{ cursor: "pointer" }}
+              >
                 {({ renderCell }) => <DataGridCell>{renderCell(item)}</DataGridCell>}
               </DataGridRow>
             )}

@@ -9,9 +9,9 @@ import {
 } from "@fluentui/react-components";
 import type { EmployeeFormValues } from "../../types/employee";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { addEmployee } from "../employee/employeeSlice";
-import { setActiveTab, setSubmitting } from "./formsSlice";
-import { createEmployee } from "../../services/employeeApi";
+import { addEmployee, updateEmployee as updateEmployeeInStore } from "../employee/employeeSlice";
+import { setActiveTab, setSelectedEmployeeId, setSubmitting } from "./formsSlice";
+import { createEmployee, updateEmployee } from "../../services/employeeApi";
 import { PersonalTabForm } from "./PersonalTabForm";
 import { ContactTabForm } from "./ContactTabForm";
 import { WorkTabForm } from "./WorkTabForm";
@@ -49,6 +49,12 @@ export function TabsPage() {
   const dispatch = useAppDispatch();
   const activeTab = useAppSelector((state) => state.forms.activeTab);
   const isSubmitting = useAppSelector((state) => state.forms.isSubmitting);
+  const selectedEmployeeId = useAppSelector(
+    (state) => state.forms.selectedEmployeeId
+  );
+  const selectedEmployee = useAppSelector((state) =>
+    state.employees.items.find((employee) => employee.id === selectedEmployeeId)
+  );
   const [submitError, setSubmitError] = useState("");
   const {showSuccess, showError} = useAppToast(); 
 
@@ -66,6 +72,10 @@ export function TabsPage() {
   });
 
   useEffect(() => {
+    reset(selectedEmployee ?? defaultValues);
+  }, [reset, selectedEmployee]);
+
+  useEffect(() => {
     if (submitError && Object.keys(errors).length === 0) {
       setSubmitError("");
     }
@@ -81,13 +91,26 @@ export function TabsPage() {
     setSubmitError("");
     dispatch(setSubmitting(true));
     try {
-      const employee = await createEmployee({
+      const payload = {
         ...values,
         status: "Active",
-      });
-      dispatch(addEmployee(employee));
-      showSuccess("Employee data saved successfully.");
+      } as const;
+
+      if (selectedEmployeeId === null) {
+        const employee = await createEmployee(payload);
+        dispatch(addEmployee(employee));
+      } else {
+        const employee = await updateEmployee(selectedEmployeeId, payload);
+        dispatch(updateEmployeeInStore(employee));
+      }
+
+      showSuccess(
+        selectedEmployeeId === null
+          ? "Employee data saved successfully."
+          : "Employee data updated successfully."
+      );
       reset(defaultValues);
+      dispatch(setSelectedEmployeeId(null));
       dispatch(setActiveTab("personal"));
     } catch (error) {
       showError("Failed to save employee data.");
