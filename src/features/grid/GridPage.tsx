@@ -26,6 +26,9 @@ const useStyles = makeStyles({
     padding: "18px",
     color: "#616161",
   },
+  heading: {
+    fontWeight: "bold",
+  },
 });
 
 export function GridPage() {
@@ -40,7 +43,7 @@ export function GridPage() {
           <DataGridHeader>
             <DataGridRow>
               {({ renderHeaderCell }) => (
-                <DataGridHeaderCell>{renderHeaderCell()}</DataGridHeaderCell>
+                <DataGridHeaderCell className={styles.heading}> {renderHeaderCell()}</DataGridHeaderCell>
               )}
             </DataGridRow>
           </DataGridHeader>

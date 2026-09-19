@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useEffect, useState } from "react";
+import { useForm, type FieldErrors } from "react-hook-form";
 import {
   Button,
   Tab,
@@ -24,6 +24,9 @@ const useStyles = makeStyles({
     minHeight: "250px",
     paddingTop: "20px",
   },
+  hiddenPanel: {
+    display: "none",
+  },
   saveButton: {
     marginTop: "18px",
   },
@@ -37,7 +40,7 @@ const useStyles = makeStyles({
 const defaultValues: EmployeeFormValues = {
   tab1: { name: "", age: "", gender: "Male" },
   tab2: { email: "", phone: "", address: "", contactMethod: "Email" },
-  tab3: { department: "", role: "" },
+  tab3: { department: "", role: "", state: "", city: "" },
 };
 
 
@@ -53,12 +56,20 @@ export function TabsPage() {
     control,
     handleSubmit,
     reset,
+    setValue,
     formState: { errors },
   } = useForm<EmployeeFormValues>({
     defaultValues,
+    shouldUnregister: false,
     mode: "onTouched",
     resolver: zodResolver(employeeFormSchema),
   });
+
+  useEffect(() => {
+    if (submitError && Object.keys(errors).length === 0) {
+      setSubmitError("");
+    }
+  }, [errors]);
 
   const handleTabChange = async (
     nextTab: "personal" | "contact" | "work"
@@ -89,6 +100,20 @@ export function TabsPage() {
     console.log("Form submitted with values:", values);
   };
 
+  const onInvalidSubmit = (validationErrors: FieldErrors<EmployeeFormValues>) => {
+    const invalidTabs = [
+      validationErrors.tab1 && "Personal",
+      validationErrors.tab2 && "Contact",
+      validationErrors.tab3 && "Work",
+    ].filter(Boolean);
+
+    setSubmitError(
+      `Please complete the required fields in the ${invalidTabs.join(
+        ", "
+      )} tab${invalidTabs.length === 1 ? "" : "s"} before saving.`
+    );
+  };
+
   return (
     <section>
       <TabList
@@ -103,21 +128,21 @@ export function TabsPage() {
       </TabList>
 
       <div className={styles.panel}>
-        {activeTab === "personal" && (
+        <div className={activeTab === "personal" ? undefined : styles.hiddenPanel}>
           <PersonalTabForm control={control} errors={errors} />
-        )}
-        {activeTab === "contact" && (
+        </div>
+        <div className={activeTab === "contact" ? undefined : styles.hiddenPanel}>
           <ContactTabForm control={control} errors={errors} />
-        )}
-        {activeTab === "work" && (
-          <WorkTabForm control={control} errors={errors} />
-        )}
+        </div>
+        <div className={activeTab === "work" ? undefined : styles.hiddenPanel}>
+          <WorkTabForm control={control} errors={errors} setValue={setValue} />
+        </div>
       </div>
 
       <Button
         className={styles.saveButton}
         appearance="primary"
-        onClick={handleSubmit(onSubmit)}
+        onClick={handleSubmit(onSubmit, onInvalidSubmit)}
         disabled={isSubmitting}
       >
         {isSubmitting ? <Spinner size="tiny" /> : "Save All"}

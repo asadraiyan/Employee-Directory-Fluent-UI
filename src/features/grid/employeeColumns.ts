@@ -5,7 +5,7 @@ export const employeeColumns = [
   createTableColumn<Employee>({
     columnId: "id",
     renderHeaderCell: () => "ID",
-    renderCell: (employee) => employee.id,
+    renderCell: (employee) => String(employee.id % 100).padStart(2, "0"),
   }),
   createTableColumn<Employee>({
     columnId: "name",
@@ -26,6 +26,16 @@ export const employeeColumns = [
     columnId: "department",
     renderHeaderCell: () => "Department",
     renderCell: (employee) => employee.tab3.department,
+  }),
+  createTableColumn<Employee>({
+    columnId: "state",
+    renderHeaderCell: () => "State",
+    renderCell: (employee) => employee.tab3.state,
+  }),
+  createTableColumn<Employee>({
+    columnId: "city",
+    renderHeaderCell: () => "City",
+    renderCell: (employee) => employee.tab3.city,
   }),
   createTableColumn<Employee>({
     columnId: "status",

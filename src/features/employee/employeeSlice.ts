@@ -16,7 +16,12 @@ const initialState: EmployeeState = {
         address: "Noida",
         contactMethod: "Email",
       },
-      tab3: { department: "Engineering", role: "Developer" },
+      tab3: {
+        department: "Engineering",
+        role: "Developer",
+        state: "Uttar Pradesh",
+        city: "Noida",
+      },
       status: "Active",
     },
     {
@@ -28,7 +33,12 @@ const initialState: EmployeeState = {
         address: "Gurgaon",
         contactMethod: "Teams",
       },
-      tab3: { department: "Design", role: "Designer" },
+      tab3: {
+        department: "Design",
+        role: "Designer",
+        state: "Haryana",
+        city: "Gurugram",
+      },
       status: "Active",
     },
     {
@@ -40,7 +50,12 @@ const initialState: EmployeeState = {
         address: "Bangalore",
         contactMethod: "Phone",
       },
-      tab3: { department: "Design", role: "Designer" },
+      tab3: {
+        department: "Design",
+        role: "Designer",
+        state: "Karnataka",
+        city: "Bengaluru Urban",
+      },
       status: "Active",
     },
   ],

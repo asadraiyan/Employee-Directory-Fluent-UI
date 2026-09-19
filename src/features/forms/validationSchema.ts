@@ -40,5 +40,7 @@ export const employeeFormSchema = z.object({
   tab3: z.object({
     department: z.string().min(1, "Please select a department."),
     role: z.string().min(1, "Role is required."),
+    state: z.string().min(1, "Please select a state."),
+    city: z.string().min(1, "Please select a city."),
   }),
 });

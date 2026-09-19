@@ -15,6 +15,8 @@ export interface EmployeeFormValues {
   tab3: {
     department: string;
     role: string;
+    state: string;
+    city: string;
   };
 }
 

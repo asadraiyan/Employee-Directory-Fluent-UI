@@ -68,14 +68,14 @@ export function ContactTabForm({ control, errors }: Props) {
           >
             <Dropdown
               placeholder="Select contact method"
+              value={field.value ?? ""}
               selectedOptions={field.value ? [field.value] : []}
               onOptionSelect={(_, data) =>
-                field.onChange(data.optionValue ?? "")
+                field.onChange(data.optionValue ?? data.optionText ?? "")
               }
             >
               <Option value="Email">Email</Option>
               <Option value="Phone">Phone</Option>
-              <Option value="Teams">Teams</Option>
             </Dropdown>
           </FormField>
         )}
