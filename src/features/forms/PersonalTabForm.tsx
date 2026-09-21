@@ -31,7 +31,7 @@ export function PersonalTabForm({ control, errors }: Props) {
         control={control}
         render={({ field }) => (
           <FormField label="Full name" error={tabErrors?.name?.message as string}>
-            <Input {...field} value={field.value ?? ""} />
+            <Input {...field} value={field.value ?? ""} maxLength={100} />
           </FormField>
         )}
       />

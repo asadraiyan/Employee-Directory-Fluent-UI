@@ -6,7 +6,7 @@ import {
   useWatch,
 } from "react-hook-form";
 import {
-  Dropdown,
+  Combobox,
   Input,
   makeStyles,
   Option,
@@ -54,10 +54,12 @@ export function WorkTabForm({ control, errors, setValue }: Props) {
             label="Department"
             error={tabErrors?.department?.message as string}
           >
-            <Dropdown
+            <Combobox
               placeholder="Select department"
               value={field.value ?? ""}
               selectedOptions={field.value ? [field.value] : []}
+              freeform={false}
+              onChange={(event) => field.onChange(event.currentTarget.value)}
               onOptionSelect={(_, data) =>
                 field.onChange(data.optionValue ?? "")
               }
@@ -67,7 +69,7 @@ export function WorkTabForm({ control, errors, setValue }: Props) {
               <Option value="QA">QA</Option>
               <Option value="Product">Product</Option>
               <Option value="HR">HR</Option>
-            </Dropdown>
+            </Combobox>
           </FormField>
         )}
       />
@@ -77,7 +79,7 @@ export function WorkTabForm({ control, errors, setValue }: Props) {
         control={control}
         render={({ field }) => (
           <FormField label="Role" error={tabErrors?.role?.message as string}>
-            <Input {...field} value={field.value ?? ""} />
+            <Input {...field} value={field.value ?? ""} maxLength={50} />
           </FormField>
         )}
       />
@@ -87,22 +89,21 @@ export function WorkTabForm({ control, errors, setValue }: Props) {
         control={control}
         render={({ field }) => (
           <FormField label="State" error={tabErrors?.state?.message as string}>
-            <Dropdown
+            <Combobox
               placeholder="Select state"
               value={field.value ?? ""}
               selectedOptions={field.value ? [field.value] : []}
+              freeform={false}
+              onChange={(event) => field.onChange(event.currentTarget.value)}
               inlinePopup
               positioning="below"
               listbox={{ className: styles.locationListbox }}
               onOptionSelect={(_, data) => {
                 const state = data.optionValue ?? data.optionText ?? "";
-                setValue("tab3.state", state, {
-                  shouldDirty: true,
-                  shouldTouch: true,
-                  shouldValidate: true,
-                });
+                field.onChange(state);
                 setValue("tab3.city", "", {
                   shouldDirty: true,
+                  shouldTouch: true,
                   shouldValidate: true,
                 });
               }}
@@ -112,7 +113,7 @@ export function WorkTabForm({ control, errors, setValue }: Props) {
                   {state.name}
                 </Option>
               ))}
-            </Dropdown>
+            </Combobox>
           </FormField>
         )}
       />
@@ -122,21 +123,19 @@ export function WorkTabForm({ control, errors, setValue }: Props) {
         control={control}
         render={({ field }) => (
           <FormField label="City" error={tabErrors?.city?.message as string}>
-            <Dropdown
+            <Combobox
               placeholder={selectedState ? "Select city" : "Select state first"}
               value={field.value ?? ""}
               selectedOptions={field.value ? [field.value] : []}
+              freeform={false}
+              onChange={(event) => field.onChange(event.currentTarget.value)}
               disabled={!selectedState}
               inlinePopup
               positioning="below"
               listbox={{ className: styles.locationListbox }}
               onOptionSelect={(_, data) => {
                 const city = data.optionValue ?? data.optionText ?? "";
-                setValue("tab3.city", city, {
-                  shouldDirty: true,
-                  shouldTouch: true,
-                  shouldValidate: true,
-                });
+                field.onChange(city);
               }}
             >
               {cities.map((city) => (
@@ -144,7 +143,7 @@ export function WorkTabForm({ control, errors, setValue }: Props) {
                   {city.name}
                 </Option>
               ))}
-            </Dropdown>
+            </Combobox>
           </FormField>
         )}
       />
