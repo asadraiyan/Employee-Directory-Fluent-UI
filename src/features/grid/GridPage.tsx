@@ -7,6 +7,7 @@ import {
   DataGridRow,
   makeStyles,
   Text,
+  tokens,
 } from "@fluentui/react-components";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { setSelectedEmployeeId } from "../forms/formsSlice";
@@ -17,25 +18,36 @@ import { createEmployeeColumns } from "./employeeColumn";
 const useStyles = makeStyles({
   section: {
     marginTop: "58px",
+    paddingTop: "28px",
+    borderTop: `1px solid ${tokens.colorNeutralStroke2}`,
   },
   tableScroll: {
     overflowX: "auto",
   },
   employeeTable: {
     minWidth: "1060px",
+    marginTop: "14px",
+    border: `1px solid ${tokens.colorNeutralStroke2}`,
+    borderRadius: tokens.borderRadiusMedium,
+    overflow: "hidden",
   },
   emptyState: {
     padding: "18px",
-    color: "#616161",
+    color: tokens.colorNeutralForeground2,
   },
   heading: {
     fontWeight: "bold",
+    color: tokens.colorBrandForeground1,
+    backgroundColor: tokens.colorNeutralBackground3,
   },
   selectedRow: {
-    backgroundColor: "#e8f3ff",
+    backgroundColor: tokens.colorBrandBackground2,
     ":hover": {
-      backgroundColor: "#d9ebff",
+      backgroundColor: tokens.colorBrandBackground2Hover,
     },
+  },
+  tableHeading: {
+    color: tokens.colorBrandForeground1,
   },
 });
 
@@ -49,10 +61,17 @@ export function GridPage() {
   const columns = createEmployeeColumns((employee: Employee) => {
     dispatch(updateEmployee(employee));
   });
+  const handleRowClick = (employeeId: number) => {
+    dispatch(
+      setSelectedEmployeeId(
+        employeeId === selectedEmployeeId ? null : employeeId
+      )
+    );
+  };
 
   return (
     <section className={styles.section}>
-      <Text as="h2" size={500} weight="bold">Table Grid</Text>
+      <Text className={styles.tableHeading} as="h2" size={500} weight="bold">Table Grid</Text>
       <div className={styles.tableScroll}>
         <DataGrid items={employees} columns={columns} className={styles.employeeTable} aria-label="Employee directory">
           <DataGridHeader>
@@ -66,7 +85,7 @@ export function GridPage() {
             {({ item, rowId }) => (
               <DataGridRow<Employee>
                 key={rowId}
-                onClick={() => dispatch(setSelectedEmployeeId(item.id))}
+                onClick={() => handleRowClick(item.id)}
                 className={
                   item.id === selectedEmployeeId ? styles.selectedRow : undefined
                 }

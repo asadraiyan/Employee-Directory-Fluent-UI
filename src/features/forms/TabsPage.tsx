@@ -6,6 +6,7 @@ import {
   TabList,
   Spinner,
   makeStyles,
+  tokens,
 } from "@fluentui/react-components";
 import type { EmployeeFormValues } from "../../types/employee";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
@@ -20,19 +21,29 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import useAppToast from "../../hooks/useAppToast";
 
 const useStyles = makeStyles({
+  tabList: {
+    paddingInline: "8px",
+    borderBottom: `1px solid ${tokens.colorNeutralStroke2}`,
+  },
   panel: {
     minHeight: "250px",
-    paddingTop: "20px",
+    padding: "28px 24px 24px",
+    border: `1px solid ${tokens.colorNeutralStroke2}`,
+    borderRadius: `0 0 ${tokens.borderRadiusMedium} ${tokens.borderRadiusMedium}`,
+    backgroundColor: tokens.colorNeutralBackground2,
+    marginTop: "10px",
   },
   hiddenPanel: {
     display: "none",
   },
   saveButton: {
     marginTop: "18px",
+    minWidth: "112px",
+    fontWeight: 600,
   },
   errorBanner: {
     marginTop: "12px",
-    color: "#a4262c",
+    color: tokens.colorPaletteRedForeground1,
     fontSize: "14px",
   },
 });
@@ -140,6 +151,7 @@ export function TabsPage() {
   return (
     <section>
       <TabList
+        className={styles.tabList}
         selectedValue={activeTab}
         onTabSelect={(_, data) =>
           handleTabChange(data.value as "personal" | "contact" | "work")
