@@ -62,7 +62,7 @@ export const createEmployeeColumns = (
           value={employee.tab3.state}
           selectedOptions={employee.tab3.state ? [employee.tab3.state] : []}
           freeform={false}
-          inlinePopup
+          // inlinePopup
           positioning="below"
           listbox={{ className: styles.locationListbox }}
           onOptionSelect={(_, data) => {
@@ -105,7 +105,7 @@ export const createEmployeeColumns = (
             selectedOptions={employee.tab3.city ? [employee.tab3.city] : []}
             freeform={false}
             disabled={!selectedState}
-            inlinePopup
+            // inlinePopup
             positioning="below"
             listbox={{ className: styles.locationListbox }}
             onOptionSelect={(_, data) => {

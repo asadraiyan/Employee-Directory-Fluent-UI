@@ -19,6 +19,7 @@ import { WorkTabForm } from "./WorkTabForm";
 import { employeeFormSchema } from "./validationSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import useAppToast from "../../hooks/useAppToast";
+import { fieldLabels, tabLabels } from "../../appConstant/app";
 
 const useStyles = makeStyles({
   tabList: {
@@ -45,6 +46,8 @@ const useStyles = makeStyles({
     marginTop: "12px",
     color: tokens.colorPaletteRedForeground1,
     fontSize: "14px",
+    whiteSpace: "pre-wrap",
+    fontFamily: "monospace",
   },
 });
 
@@ -135,17 +138,23 @@ export function TabsPage() {
   };
 
   const onInvalidSubmit = (validationErrors: FieldErrors<EmployeeFormValues>) => {
-    const invalidTabs = [
-      validationErrors.tab1 && "Personal",
-      validationErrors.tab2 && "Contact",
-      validationErrors.tab3 && "Work",
-    ].filter(Boolean);
+    const errorMessage = Object.entries(validationErrors)
+      .map(([tab, tabErrors]) => {
+        const tabKey = tab as keyof typeof tabLabels;
+        const fields = Object.entries(tabErrors ?? {})
+          .map(([field, error]) => {
+            const fieldKey = field as keyof (typeof fieldLabels)[typeof tabKey];
+            return `  ${fieldLabels[tabKey][fieldKey]}: ${
+              error?.message ?? "Invalid value."
+            }`;
+          })
+          .join("\n");
 
-    setSubmitError(
-      `Please complete the required fields in the ${invalidTabs.join(
-        ", "
-      )} tab${invalidTabs.length === 1 ? "" : "s"} before saving.`
-    );
+        return `${tabLabels[tabKey]}\n${fields}`;
+      })
+      .join("\n\n");
+
+    setSubmitError(errorMessage);
   };
 
   return (
@@ -183,7 +192,7 @@ export function TabsPage() {
         {isSubmitting ? <Spinner size="tiny" /> : "Save All"}
       </Button>
 
-      {submitError && <div className={styles.errorBanner}>{submitError}</div>}
+      {submitError && <pre className={styles.errorBanner}>{submitError}</pre>}
     </section>
   );
 }
